@@ -1902,12 +1902,30 @@ var Wy=Uint8Array,qy=Uint16Array,Xy=Int32Array,jy=new Wy([0,0,0,0,0,0,0,0,1,1,1,
   let factsDone = false;
 
   /* inertial wheel scrolling: the page glides after the wheel instead of jumping */
-  const glide = el => { let tgt = el.scrollTop, cur = el.scrollTop, raf = 0;
-    const step = () => { cur += (tgt - cur)*.1; if (Math.abs(tgt - cur) < .4) cur = tgt; el.scrollTop = cur; raf = cur !== tgt ? requestAnimationFrame(step) : 0; };
-    el.addEventListener('wheel', e => { if (e.ctrlKey) return; e.preventDefault(); const max = el.scrollHeight - el.clientHeight;
-      if (!raf){ cur = tgt = el.scrollTop; } tgt = Math.max(0, Math.min(max, tgt + e.deltaY*(e.deltaMode === 1 ? 40 : 1))); if (!raf) raf = requestAnimationFrame(step); }, { passive: false });
+  /* website-like wheel scrolling: quicker inertial glide + soft stops at each key scene */
+  const glide = (el, snaps) => { let tgt = el.scrollTop, cur = el.scrollTop, raf = 0, idle = 0, dir = 0;
+    const max = () => el.scrollHeight - el.clientHeight;
+    const step = () => { cur += (tgt - cur)*.13; if (Math.abs(tgt - cur) < .4) cur = tgt; el.scrollTop = cur; raf = cur !== tgt ? requestAnimationFrame(step) : 0; };
+    const go = y => { tgt = Math.max(0, Math.min(max(), y)); if (!raf) raf = requestAnimationFrame(step); };
+    const settle = () => { const pts = snaps().filter(v => v >= 0 && v <= max()), vh = el.clientHeight; if (!pts.length) return;
+      // nearest stop in the direction of travel, within ~half a screen; otherwise stay put
+      let best = null, bd = 1e9; for (const v of pts){ const d = v - tgt; if (Math.abs(d) < bd && Math.abs(d) < vh*.36 && (d === 0 || Math.sign(d) === dir || Math.abs(d) < vh*.12)){ bd = Math.abs(d); best = v; } }
+      if (best !== null) go(best); };
+    el.addEventListener('wheel', e => { if (e.ctrlKey) return; e.preventDefault();
+      if (!raf){ cur = tgt = el.scrollTop; } const dy = e.deltaY*(e.deltaMode === 1 ? 40 : 1)*1.35; if (dy) dir = Math.sign(dy);
+      go(tgt + dy); clearTimeout(idle); idle = setTimeout(settle, 220); }, { passive: false });
     el.addEventListener('scroll', () => { if (Math.abs(el.scrollTop - cur) > 2){ cancelAnimationFrame(raf); raf = 0; cur = tgt = el.scrollTop; } }); };   // a jump from code or the keyboard wins
-  glide(pgF); glide(pgD);
+  const snapF = () => { const f = pgF, vh = f.clientHeight, tr = f.querySelector('.f-track'), m = tr.offsetHeight - vh, out = [0];
+    [.2, .42, .62, .82].forEach(c => out.push(c*m));                                   // orb: logo · date · stats · tagline
+    const blk = f.querySelector('.fs-block'); if (blk){ const bm = blk.offsetHeight - vh; out.push(blk.offsetTop + bm*.12, blk.offsetTop + bm); }   // key message · full photo + archive button
+    for (const q of ['.fs-abig', '.fs-about']){ const e = f.querySelector(q); if (e && e.offsetParent) out.push(e.offsetTop - (q === '.fs-about' ? 60 : 0)); }
+    const cd = f.querySelector('.fs-cards'); if (cd) out.push(cd.offsetTop + (cd.offsetHeight - vh)*.62);   // identity cards lined up
+    out.push(f.scrollHeight - vh);                                                      // marquee + footer
+    return out; };
+  const snapD = () => { const d = pgD, vh = d.clientHeight, out = [];
+    d.querySelectorAll('.dx-track').forEach(t => { const m = t.offsetHeight - vh; for (let k = 0; k < 4; k++) out.push(t.offsetTop + m*k/3); });   // each device step
+    out.push(d.scrollHeight - vh); return out; };
+  glide(pgF, snapF); glide(pgD, snapD);
   /* section copy rises line by line */
   const splitLines = el => { const words = [];
     const walk = (node, hl) => [...node.childNodes].forEach(n => { if (n.nodeType === 3) n.textContent.split(/(\s+)/).forEach(t => { if (!t) return; words.push(/^\s+$/.test(t) ? null : { t, hl }); }); else if (n.nodeType === 1) walk(n, hl || n.tagName === 'B'); });
@@ -2363,6 +2381,5 @@ var Wy=Uint8Array,qy=Uint16Array,Xy=Int32Array,jy=new Wy([0,0,0,0,0,0,0,0,1,1,1,
   requestAnimationFrame(frame);
 })();
 </script>
-
 </body>
 </html>
