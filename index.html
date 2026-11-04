@@ -510,6 +510,33 @@ button:focus-visible{outline:none}
 #field{isolation:isolate}
 #stage #band{z-index:1490!important;transform:translateZ(0)}
 #stage #hdrFade{z-index:1495!important}
+
+/* ---- DEVICE · SIGNAL: gesture pictogram → pixel screen ---- */
+#pgD .dx-sig{position:relative;height:calc(834px + var(--dy));background:#fff;color:#0b0d12;display:flex;flex-direction:column;justify-content:center;gap:56px;padding:0 56px;box-sizing:border-box}
+#pgD .sg-head{display:flex;justify-content:space-between;align-items:flex-end;gap:40px}
+#pgD .sg-head .dx-lab{margin-bottom:22px}
+#pgD .sg-head h3{margin:0;font:400 40px/1.1 var(--cal);letter-spacing:-.8px;color:#0b0d12}
+#pgD .sg-head p{margin:0;max-width:520px;text-align:right;font:500 15.45px/27px "Pretendard","Apple SD Gothic Neo","Noto Sans KR",sans-serif;color:#30343c;word-break:keep-all}
+#pgD .sg-head p b{font-weight:600;color:#0b0d12}
+#pgD .sg-deck{display:flex;gap:20px}
+#pgD .sg-card{flex:1 1 0;min-width:0;padding:26px 24px 28px;border-radius:10px;background:#f1f3f6;transition:background .45s var(--ease)}
+#pgD .sg-card small{display:block;font:600 12px/16px var(--cal);letter-spacing:.06em;color:#8c93a3}
+#pgD .sg-row{display:flex;align-items:center;justify-content:space-between;margin:18px 0 22px}
+#pgD .sg-pic{width:46%;height:auto;fill:none;stroke:#0b0d12;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;transition:stroke .45s var(--ease)}
+#pgD .sg-pic .sg-acc{stroke:#8c93a3;transition:stroke .45s var(--ease)}
+#pgD .sg-pic text{fill:#0b0d12;stroke:none;font:600 13px var(--cal);letter-spacing:.04em;transition:fill .45s var(--ease)}
+#pgD .sg-eq rect{fill:#0b0d12;stroke:none;transform-box:fill-box;transform-origin:50% 100%;animation:sgEq .47s ease-in-out infinite alternate;transition:fill .45s var(--ease)}
+#pgD .sg-eq rect:nth-child(2){animation-delay:-.2s}#pgD .sg-eq rect:nth-child(3){animation-delay:-.35s}#pgD .sg-eq rect:nth-child(4){animation-delay:-.1s}#pgD .sg-eq rect:nth-child(5){animation-delay:-.28s}
+@keyframes sgEq{from{transform:scaleY(.25)}to{transform:scaleY(1)}}
+#pgD .sg-to{font:400 22px var(--cal);color:#b5bac5}
+#pgD .sg-disc{width:38%;aspect-ratio:1;border-radius:50%;background:#0b0d12;box-shadow:inset 0 0 0 4px #24272e;display:flex;align-items:center;justify-content:center}
+#pgD .sg-disc canvas{width:90%;height:90%;border-radius:50%}
+#pgD .sg-card h4{margin:0 0 10px;font:400 26px/1.1 var(--cal);letter-spacing:-.5px;color:#0b0d12;transition:color .45s var(--ease)}
+#pgD .sg-card p{margin:0;font:600 14.5px/24px "Pretendard","Apple SD Gothic Neo","Noto Sans KR",sans-serif;color:#30343c;word-break:keep-all;transition:color .45s var(--ease)}
+#pgD .sg-card:hover{background:#e8f6ff}
+#pgD .sg-card:hover h4,#pgD .sg-card:hover small{color:var(--blue)}
+#pgD .sg-card:hover .sg-pic,#pgD .sg-card:hover .sg-pic .sg-acc{stroke:var(--blue)}
+#pgD .sg-card:hover .sg-eq rect{fill:var(--blue)}#pgD .sg-card:hover .sg-pic text{fill:var(--blue)}
 /* ================= WHITE TONE ================= */
 .pgfest .logo,.pgdev .logo{filter:none!important}
 :root{--ink:#0b0d12}
@@ -672,6 +699,24 @@ body,#wrap,#stage{background:#fff}
       <div class="dx-step"><div class="dx-lab">HIGHLIGHT REC</div><h3>It sees what<br>you saw.</h3><p>디스크 속 카메라가 하이라이트 순간을 관객 사이에서 기록합니다. 손잡이 안 카트리지를 빼서 그 기록을 ARCHIVE로 옮깁니다.</p><em>swap-in battery &amp; storage cartridge</em></div>
       <div class="dx-prog"><i></i><i></i><i></i><i></i></div><div class="dx-scroll">SCROLL</div>
     </div></div>
+    <section class="dx-sig" aria-label="Gesture to pixel signals">
+      <div class="sg-head"><div><div class="dx-lab">SIGNAL</div><h3>One gesture,<br>one signal.</h3></div>
+        <p>스태프의 제스처 하나가 관객 화면의 픽셀 연출로 바뀝니다.<br>안전 신호는 언제나 <b>흰색</b>, 그 밖의 모든 순간은 음악의 <b>BPM</b>에 맞춘 엔터 모드입니다.</p></div>
+      <div class="sg-deck">
+        <article class="sg-card" data-m="att"><small>SAFETY · 01</small>
+          <div class="sg-row"><svg class="sg-pic" viewBox="0 0 160 140" aria-hidden="true"><circle cx="80" cy="48" r="10"/><path d="M80 58V100M80 100l-12 34M80 100l12 34"/><path d="M80 68l-16 24"/><path d="M80 66l18-22 4-22"/><circle cx="103" cy="12" r="8"/><path d="M90 6a16 16 0 0 0 0 12M116 6a16 16 0 0 1 0 12" class="sg-acc"/><path d="M134 46V16M127 23l7-7 7 7" class="sg-acc"/></svg><span class="sg-to" aria-hidden="true">→</span><div class="sg-disc"><canvas width="240" height="240"></canvas></div></div>
+          <h4>ATTENTION</h4><p>기기를 머리 위로 들면, 흰 링이 화면 중심으로 모이며 시선을 한곳으로 모읍니다.</p></article>
+        <article class="sg-card" data-m="lr"><small>SAFETY · 02</small>
+          <div class="sg-row"><svg class="sg-pic" viewBox="0 0 160 140" aria-hidden="true"><circle cx="70" cy="48" r="10"/><path d="M70 58V100M70 100l-12 34M70 100l12 34"/><path d="M70 68l-16 24"/><path d="M70 67h44"/><circle cx="123" cy="66" r="8"/><path d="M100 36h52M107 29l-7 7 7 7M145 29l7 7-7 7" class="sg-acc"/></svg><span class="sg-to" aria-hidden="true">→</span><div class="sg-disc"><canvas width="240" height="240"></canvas></div></div>
+          <h4>LEFT · RIGHT</h4><p>팔을 옆으로 뻗으면, 흰 초승달이 가장자리를 따라 그 방향으로 지나갑니다.</p></article>
+        <article class="sg-card" data-m="back"><small>SAFETY · 03</small>
+          <div class="sg-row"><svg class="sg-pic" viewBox="0 0 160 140" aria-hidden="true"><circle cx="62" cy="48" r="10"/><path d="M62 58V100M62 100l-8 34M62 100l14 34M62 68l-6 26"/><path d="M62 66h38"/><rect x="101" y="52" width="7" height="28" rx="3.5"/><path d="M122 58l8 8-8 8M136 58l8 8-8 8" class="sg-acc"/></svg><span class="sg-to" aria-hidden="true">→</span><div class="sg-disc"><canvas width="240" height="240"></canvas></div></div>
+          <h4>MOVE BACK</h4><p>손을 앞으로 밀면, 흰 픽셀이 뒤쪽으로 흘러 물러설 방향을 알립니다.</p></article>
+        <article class="sg-card sg-ent" data-m="ent"><small>ENTER</small>
+          <div class="sg-row"><svg class="sg-pic" viewBox="0 0 160 140" aria-hidden="true"><g class="sg-eq"><rect x="40" y="40" width="10" height="70" rx="5"/><rect x="58" y="40" width="10" height="70" rx="5"/><rect x="76" y="40" width="10" height="70" rx="5"/><rect x="94" y="40" width="10" height="70" rx="5"/><rect x="112" y="40" width="10" height="70" rx="5"/></g><text x="81" y="134" text-anchor="middle">128 BPM</text></svg><span class="sg-to" aria-hidden="true">→</span><div class="sg-disc"><canvas width="240" height="240"></canvas></div></div>
+          <h4>EVERY BPM</h4><p>안전 신호가 없는 모든 순간, 음악의 BPM에 어울리는 컬러 픽셀 연출이 펼쳐집니다.</p></article>
+      </div>
+    </section>
     <div class="dx-track" data-u="crowd"><div class="dx-sticky">
       <div class="dx-bg"></div><div class="dx-mv"></div>
       <div class="dx-ch">02 — CROWD UNIT</div>
@@ -1937,8 +1982,31 @@ var Wy=Uint8Array,qy=Uint16Array,Xy=Int32Array,jy=new Wy([0,0,0,0,0,0,0,0,1,1,1,
     return out; };
   const snapD = () => { const d = pgD, vh = d.clientHeight, out = [];
     d.querySelectorAll('.dx-track').forEach(t => { const m = t.offsetHeight - vh; for (let k = 0; k < 4; k++) out.push(t.offsetTop + m*k/3); });   // each device step
+    const sg = d.querySelector('.dx-sig'); if (sg) out.push(sg.offsetTop);   // gesture → pixel signal sheet
     out.push(d.scrollHeight - vh); return out; };
   glide(pgF, snapF); glide(pgD, snapD);
+  /* DEVICE · SIGNAL — little round pixel screens, one per signal (safety = white only, enter = colour on the beat) */
+  (() => { const cards = [...pgD.querySelectorAll('.sg-card')]; if (!cards.length) return;
+    const N = 9, dots = []; for (let k = 0; k <= N; k++){ const m = Math.max(1, Math.round(6.2832*k)); for (let j = 0; j < m; j++){ const a = j/m*6.2832 + (k % 2)*.2; dots.push([k/N*Math.cos(a), k/N*Math.sin(a), k/N, a]); } }
+    const COL = ['#00a4fc','#6cc4ff','#ff6b3d','#ff8fd8','#ffffff'];
+    const sm = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a)/(b - a))); return t*t*(3 - 2*t); };
+    const val = (m, x, y, r, a, t) => {
+      if (m === 'att'){ const r0 = 1 - ((t*.55) % 1); return Math.max(Math.exp(-Math.pow((r - r0)/.14, 2)), .12); }
+      if (m === 'lr'){ const th = Math.PI*(1 - ((t*.4) % 1)*1.0) ; let da = Math.abs(((a - th + 9.42478) % 6.2832) - 3.1416); return Math.max(sm(1.1, .2, da)*sm(.3, .9, r), .1); }
+      if (m === 'back'){ const ph = ((y*1.6 - t*1.1) % 1 + 1) % 1; return Math.max(sm(.55, 1, ph)*.95, .1); }
+      return 0; };
+    const draw = (cv, m, t) => { const g = cv.getContext('2d'), W = cv.width, R = W/2 - 10, dr = R/N*.36; g.clearRect(0, 0, W, W);
+      const beat = Math.pow(1 - ((t*128/60) % 1), 2.2);
+      for (const [x, y, r, a] of dots){ let v, c = '#fff';
+        if (m === 'ent'){ const n = Math.sin(x*3.1 + t*1.3) + Math.cos(y*2.7 - t*1.1) + Math.sin((x + y)*4 + t*2); const kidx = Math.floor((n + 3)/6*4.99); c = COL[Math.min(4, Math.max(0, kidx))]; v = Math.max(sm(.2, 1.4, n + beat*1.2), .12)*(.55 + .45*beat); }
+        else v = val(m, x, y, r, a, t);
+        g.globalAlpha = Math.min(1, .25 + v*.9); g.fillStyle = c; g.beginPath(); g.arc(W/2 + x*R, W/2 + y*R, dr*(.55 + .6*v), 0, 6.2832); g.fill(); }
+      g.globalAlpha = 1; };
+    const cvs = cards.map(c => [c.querySelector('canvas'), c.dataset.m]); let last = 0, vis = false;
+    if ('IntersectionObserver' in window) new IntersectionObserver(es => { vis = es[0].isIntersecting; }, { root: pgD }).observe(pgD.querySelector('.dx-sig')); else vis = true;
+    const loop = now => { requestAnimationFrame(loop); if (!vis || page !== 'device' || now - last < 33) return; last = now; const t = now/1000; cvs.forEach(([cv, m]) => draw(cv, m, t)); };
+    cvs.forEach(([cv, m]) => draw(cv, m, 0)); requestAnimationFrame(loop); })();
+
   /* section copy rises line by line */
   const splitLines = el => { const words = [];
     const walk = (node, hl) => [...node.childNodes].forEach(n => { if (n.nodeType === 3) n.textContent.split(/(\s+)/).forEach(t => { if (!t) return; words.push(/^\s+$/.test(t) ? null : { t, hl }); }); else if (n.nodeType === 1) walk(n, hl || n.tagName === 'B'); });
