@@ -2175,12 +2175,12 @@ var Wy=Uint8Array,qy=Uint16Array,Xy=Int32Array,jy=new Wy([0,0,0,0,0,0,0,0,1,1,1,
   //   staff: front → side → one full turn → top          crowd: front(=top of its screen) → side → turn → top
   const PATH = {
     staff: [[0, 0, 40, 105], [.28, 90, 78, 100], [.74, 380, 68, 100], [1, 395, 58, 98]],   // ends on a 3/4 hero view, screen to camera
-    crowd: [[0, 0, 12, 150], [.28, 90, 82, 120], [.72, 450, 72, 120], [1, 450, 2, 155]] };
+    crowd: [[0, 0, 12, 205], [.28, 90, 82, 165], [.72, 450, 72, 165], [1, 450, 2, 212]] };   // pulled back so it reads the same size as the staff unit
   const BG = { staff: ['#020c1d', '#0a2f63'], crowd: ['#011a44', '#0a56c8'] };
   const mvs = {};
   pgD.querySelectorAll('.dx-track').forEach(tr => { const u = tr.dataset.u, v = document.createElement('model-viewer');
     Object.entries({ 'environment-image':'neutral', 'shadow-intensity':'0', exposure:'1.45', 'tone-mapping':'neutral', 'interaction-prompt':'none', 'interpolation-decay':'40',
-      'field-of-view':'9deg', 'min-field-of-view':'9deg', 'max-field-of-view':'9deg', 'min-camera-orbit':'-Infinity 0deg auto', 'max-camera-orbit':'Infinity 180deg auto', alt: u === 'staff' ? 'B!T staff unit' : 'B!T crowd unit' }).forEach(([k, x]) => v.setAttribute(k, x));
+      'field-of-view':'9deg', 'min-field-of-view':'9deg', 'max-field-of-view':'9deg', 'min-camera-orbit':'-Infinity 0deg auto', 'max-camera-orbit':'Infinity 180deg 400%', alt: u === 'staff' ? 'B!T staff unit' : 'B!T crowd unit' }).forEach(([k, x]) => v.setAttribute(k, x));
     v.src = MODELS[u]; tr.querySelector('.dx-mv').appendChild(v);
     // translucent frosted-acrylic look: the silhouette reads, fine detail stays soft
     v.addEventListener('load', () => { try { v.model.materials.forEach(m => { const scr = /^screen/.test(m.name || '');
@@ -2381,5 +2381,3 @@ var Wy=Uint8Array,qy=Uint16Array,Xy=Int32Array,jy=new Wy([0,0,0,0,0,0,0,0,1,1,1,
   requestAnimationFrame(frame);
 })();
 </script>
-</body>
-</html>
