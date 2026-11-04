@@ -1233,9 +1233,14 @@ var Wy=Uint8Array,qy=Uint16Array,Xy=Int32Array,jy=new Wy([0,0,0,0,0,0,0,0,1,1,1,
   const clip = (muted, k = 0) => { const v = document.createElement('video');   /* always silent: Safari only autoplays muted video */
     v.muted = true; v.defaultMuted = true; v.setAttribute('muted', ''); v.setAttribute('playsinline', ''); v.setAttribute('webkit-playsinline', ''); v.setAttribute('autoplay', ''); v.preload = 'auto';
     v.loop = true; v.playsInline = true; v.autoplay = true; v.className = 'clip'; v.poster = VIDS[k][1]; v.src = VIDS[k][0];
-    const kick = () => { if (v.paused && v.isConnected) v.play().catch(() => {}); }; v.addEventListener('loadeddata', kick); v.addEventListener('canplay', kick); setTimeout(kick, 300); return v; };
+    const kick = () => { if (v.paused && v.isConnected && !v.classList.contains('tile')) v.play().catch(() => {}); }; v.addEventListener('loadeddata', kick); v.addEventListener('canplay', kick); setTimeout(kick, 300); return v; };
   /* Safari sometimes refuses the first autoplay: retry every silent clip on the first touch, click, wheel or key */
-  const wakeClips = () => document.querySelectorAll('video.clip').forEach(v => { if (v.paused && v.isConnected && v.getClientRects().length) v.play().catch(() => {}); });
+  const wakeClips = () => { centreClip(); document.querySelectorAll('video.clip:not(.tile)').forEach(v => { if (v.paused && v.isConnected && v.getClientRects().length) v.play().catch(() => {}); }); };
+  /* VIDEOS row: only the clip in the middle of the screen plays, the rest hold still */
+  const centreClip = () => { const vs = [...document.querySelectorAll('#field video.tile')].filter(v => v.getClientRects().length); if (!vs.length) return;
+    const mid = innerWidth/2; let best = null, bd = 1e9; vs.forEach(v => { const r = v.getBoundingClientRect(), d = Math.abs(r.left + r.width/2 - mid); if (d < bd){ bd = d; best = v; } });
+    vs.forEach(v => { if (v === best){ if (v.paused) v.play().catch(() => {}); } else if (!v.paused) v.pause(); }); };
+  setInterval(centreClip, 200);
   ['pointerdown','wheel','keydown','touchstart'].forEach(ev => addEventListener(ev, wakeClips, { passive: true }));
   setInterval(wakeClips, 1500);
   const photoFor = r => PHOTOS[((r - 1) % PHOTOS.length + PHOTOS.length) % PHOTOS.length];
@@ -1295,7 +1300,7 @@ var Wy=Uint8Array,qy=Uint16Array,Xy=Int32Array,jy=new Wy([0,0,0,0,0,0,0,0,1,1,1,
       el.innerHTML = `<div class="face" style="background:${g} url(${ph}) center/cover no-repeat"></div><span class="badge"></span><svg aria-hidden="true"><polygon fill="none" stroke="#00a4fc" stroke-width="2"/></svg>`;
       el.setAttribute('aria-label', id(i));
       el.addEventListener('click', () => { if (dragged) return; const o = wrapO(v - pos); if (Math.abs(o) < .5) openViewer(v); else target = Math.round(pos + o); });
-      if (folder === 3){ const f = el.querySelector('.face'), v = clip(true, i % VIDS.length); v.autoplay = true; f.appendChild(v); const gr = document.createElement('i'); gr.className = 'vgrain'; f.appendChild(gr); v.play().catch(() => {}); }
+      if (folder === 3){ const f = el.querySelector('.face'), v = clip(true, i % VIDS.length); v.classList.add('tile'); v.autoplay = false; v.removeAttribute('autoplay'); f.appendChild(v); const gr = document.createElement('i'); gr.className = 'vgrain'; f.appendChild(gr); }
       field.appendChild(el); cards.push({el, g, ph, badge: el.querySelector('.badge'), r:i, poly: el.querySelector('polygon'), svg: el.querySelector('svg'), enter: 0});
     }
     applyMode();
