@@ -510,6 +510,11 @@ button:focus-visible{outline:none}
 #field{isolation:isolate}
 #stage #band{z-index:1490!important;transform:translateZ(0)}
 #stage #hdrFade{z-index:1495!important}
+
+/* Safari freezes <video> under CSS filters / blend modes: clips are already greyscale in the file, so video faces skip both */
+.card .face.vface,.bwon .card .face.vface,.cmode .card .face.vface,.cmode.bwon .card.cen .face.vface,#big .ph.vface,.cmode #big .ph.vface{filter:none!important}
+.vface .vgrain{display:none!important}
+.vface{will-change:auto}
 /* ================= WHITE TONE ================= */
 .pgfest .logo,.pgdev .logo{filter:none!important}
 :root{--ink:#0b0d12}
@@ -1300,7 +1305,7 @@ var Wy=Uint8Array,qy=Uint16Array,Xy=Int32Array,jy=new Wy([0,0,0,0,0,0,0,0,1,1,1,
       el.innerHTML = `<div class="face" style="background:${g} url(${ph}) center/cover no-repeat"></div><span class="badge"></span><svg aria-hidden="true"><polygon fill="none" stroke="#00a4fc" stroke-width="2"/></svg>`;
       el.setAttribute('aria-label', id(i));
       el.addEventListener('click', () => { if (dragged) return; const o = wrapO(v - pos); if (Math.abs(o) < .5) openViewer(v); else target = Math.round(pos + o); });
-      if (folder === 3){ const f = el.querySelector('.face'), v = clip(true, i % VIDS.length); v.classList.add('tile'); v.autoplay = false; v.removeAttribute('autoplay'); f.appendChild(v); const gr = document.createElement('i'); gr.className = 'vgrain'; f.appendChild(gr); }
+      if (folder === 3){ const f = el.querySelector('.face'), v = clip(true, i % VIDS.length); v.classList.add('tile'); v.autoplay = false; v.removeAttribute('autoplay'); f.classList.add('vface'); f.appendChild(v); const gr = document.createElement('i'); gr.className = 'vgrain'; f.appendChild(gr); }
       field.appendChild(el); cards.push({el, g, ph, badge: el.querySelector('.badge'), r:i, poly: el.querySelector('polygon'), svg: el.querySelector('svg'), enter: 0});
     }
     applyMode();
@@ -1414,9 +1419,9 @@ var Wy=Uint8Array,qy=Uint16Array,Xy=Int32Array,jy=new Wy([0,0,0,0,0,0,0,0,1,1,1,
       setBig(from.map((v,i)=>v+(to[i]-v)*e), dFrom+(dTo-dFrom)*e); if (t<1) anim = requestAnimationFrame(step); else done && done(); };
     anim = requestAnimationFrame(step); }
   let bigClip = null;
-  const dropClip = () => { if (bigClip){ bigClip.pause(); bigClip.remove(); bigClip = null; } bigPh.querySelectorAll('.vgrain').forEach(e => e.remove()); };
+  const dropClip = () => { bigPh.classList.remove('vface'); if (bigClip){ bigClip.pause(); bigClip.remove(); bigClip = null; } bigPh.querySelectorAll('.vgrain').forEach(e => e.remove()); };
   function fillViewer(v){ vi = mod(v, cards.length); const r = cards[vi].r; bigPh.style.background = `#707070 url(${cards[vi].ph}) center/cover no-repeat`;
-    dropClip(); if (folder === 3){ bigClip = clip(false, r % VIDS.length); bigPh.appendChild(bigClip); const gr = document.createElement('i'); gr.className = 'vgrain'; bigPh.appendChild(gr); bigClip.currentTime = 0; bigClip.play().catch(() => { bigClip.muted = true; bigClip.play().catch(() => {}); }); }
+    dropClip(); if (folder === 3){ bigClip = clip(false, r % VIDS.length); bigPh.classList.add('vface'); bigPh.appendChild(bigClip); const gr = document.createElement('i'); gr.className = 'vgrain'; bigPh.appendChild(gr); bigClip.currentTime = 0; bigClip.play().catch(() => { bigClip.muted = true; bigClip.play().catch(() => {}); }); }
     document.getElementById('vname').textContent = caption(r);
     document.getElementById('track').textContent = TRACKS[(r + folder) % TRACKS.length];
     startTrack(); }
